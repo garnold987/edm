@@ -1,12 +1,10 @@
 package edm.model.user;
 
-import java.util.Collection;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 @Entity
 public class Role {
@@ -15,15 +13,21 @@ public class Role {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column
 	private String name;
 	
-	@ManyToMany(mappedBy = "roles")
-	private Collection<User> users;
+	@Column 
+	private String description;
 	
 	protected Role() { }
 	
 	public Role(String name) {
-		setName(name);
+		this.setName(name);
+	}
+	
+	public Role(String name, String description) {
+		this.setName(name);
+		this.setDescription(description);
 	}
 
 	public Long getId() {
@@ -42,16 +46,16 @@ public class Role {
 		this.name = name;
 	}
 
-	public Collection<User> getUsers() {
-		return users;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setUsers(Collection<User> users) {
-		this.users = users;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Role[id=%d, name='%s']", getId(), getName());
+		return String.format("Role[id=%d, name='%s', description='%s']", getId(), getName(), getDescription());
 	}
 }

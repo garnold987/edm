@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import edm.model.user.Role;
 
-@RepositoryRestResource(collectionResourceRel = "role", path = "role")
+@RepositoryRestResource(collectionResourceRel = "roles", path = "roles")
 public interface RoleRepository extends CrudRepository<Role, Long> {
 
 	Role findByName(@Param("name") String name);
