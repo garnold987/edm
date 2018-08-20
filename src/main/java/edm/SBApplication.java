@@ -39,18 +39,18 @@ public class SBApplication {
 			arepository.save(checking);
 			arepository.save(savings);
 		
-			createRoleIfNotFound("ROLE_ADMIN");
-			createRoleIfNotFound("ROLE_MANAGER");
-			createRoleIfNotFound("ROLE_USER");
+			createRoleIfNotFound("ADMIN", "Admin Role");
+			createRoleIfNotFound("MANAGER", "Manager Role");
+			createRoleIfNotFound("USER", "User Role");
 			
 			
 			User garnold = new User("garnold", "edm4life", true);
-			Role admin = rrepository.findByName("ROLE_ADMIN");
-			garnold.addRole(admin);
+			garnold.addRole(rrepository.findByName("ADMIN"));
+			garnold.addRole(rrepository.findByName("USER"));
 			User dmccleary = new User("dmccleary", "php4good", true);
-			dmccleary.addRole(rrepository.findByName("ROLE_USER"));
+			dmccleary.addRole(rrepository.findByName("USER"));
 			User rfulcher = new User("rfulcher", "drupal#1", true);
-			rfulcher.addRole(rrepository.findByName("ROLE_MANAGER"));
+			rfulcher.addRole(rrepository.findByName("MANAGER"));
 			urepository.save(garnold);
 			urepository.save(dmccleary);
 			urepository.save(rfulcher);
@@ -61,10 +61,10 @@ public class SBApplication {
 	}
 	
 	@Transactional
-	private Role createRoleIfNotFound(String name) {
+	private Role createRoleIfNotFound(String name, String description) {
 		Role role = roleRepository.findByName(name);
 		if(role == null) {
-			role = new Role(name);
+			role = new Role(name, description);
 			roleRepository.save(role);
 		}
 		return role;
