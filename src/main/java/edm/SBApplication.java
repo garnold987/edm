@@ -39,23 +39,23 @@ public class SBApplication {
 			arepository.save(checking);
 			arepository.save(savings);
 		
-			createRoleIfNotFound("ADMIN", "Admin Role");
-			createRoleIfNotFound("MANAGER", "Manager Role");
-			createRoleIfNotFound("USER", "User Role");
+			createRoleIfNotFound("ROLE_ADMIN", "Admin Role");
+			createRoleIfNotFound("ROLE_MANAGER", "Manager Role");
+			createRoleIfNotFound("ROLE_USER", "User Role");
 			
 			
-			User garnold = new User("garnold", "edm4life", true);
+			User garnold = new User("Greg", "garnold", "garnold@test.com", "edm4life", true);
 			urepository.save(garnold);
-			garnold.addRole(rrepository.findByName("ADMIN"));
-			garnold.addRole(rrepository.findByName("USER"));
+			garnold.addRole(rrepository.findByName("ROLE_ADMIN"));
+			garnold.addRole(rrepository.findByName("ROLE_USER"));
 			urepository.save(garnold);
-			User dmccleary = new User("dmccleary", "php4good", true);
+			User dmccleary = new User("Dan", "dmccleary", "dan@test.com", "php4good", true);
 			urepository.save(dmccleary);
-			dmccleary.addRole(rrepository.findByName("USER"));
+			dmccleary.addRole(rrepository.findByName("ROLE_USER"));
 			urepository.save(dmccleary);
-			User rfulcher = new User("rfulcher", "drupal#1", true);
+			User rfulcher = new User("Robert", "rfulcher", "robby@test.com", "drupal#1", true);
 			urepository.save(rfulcher);
-			rfulcher.addRole(rrepository.findByName("MANAGER"));
+			rfulcher.addRole(rrepository.findByName("ROLE_MANAGER"));
 			urepository.save(rfulcher);
 			
 		arepository.findAll().forEach(System.out::println);

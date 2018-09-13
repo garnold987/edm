@@ -67,6 +67,11 @@
   		<groupId>org.springframework.hateoas</groupId>
   		<artifactId>spring-hateoas</artifactId>
   	</dependency>
+  	<dependency>
+  		<groupId>io.jsonwebtoken</groupId>
+  		<artifactId>jjwt</artifactId>
+  		<version>0.4</version>
+  	</dependency>
   </dependencies>
   <properties>
   	<failOnMissingWebXml>false</failOnMissingWebXml>

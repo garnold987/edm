@@ -18,6 +18,8 @@ import javax.persistence.Table;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -29,8 +31,15 @@ public class User {
 	@Column(name = "username", unique = true)
 	private String username;
 	
+	@Column(name = "name")
+	private String name;
+	
+	@JsonIgnore
 	@Column(name = "password")
 	private String password;
+	
+	@Column(name = "email")
+	private String email;
 	
 	private boolean enabled;
 	
@@ -42,8 +51,11 @@ public class User {
 	
 	protected User() { }
 	
-	public User(String username, String password, boolean enabled) {
+	public User(String name, String username, String email, String password, boolean enabled) {
+		
+		setName(name);
 		setUsername(username);
+		setEmail(email);
 		setPassword(password);
 		setEnabled(enabled);
 	}
@@ -72,10 +84,6 @@ public class User {
 		this.password = new BCryptPasswordEncoder().encode(password);
 	}
 
-	public boolean validatePassword(String password) {
-		return new BCryptPasswordEncoder().matches(password, this.password);
-	}
-	
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -96,9 +104,25 @@ public class User {
 		getRoles().add(role);
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
-		return String.format("User[id=%d, username='%s', password='%s', enabled=%s, roles='%s']", 
-									getId(), getUsername(), getPassword(), isEnabled(), getRoles());
+		return String.format("User[id=%d, name='%s', username='%s', email='%s', password='%s', enabled=%s, roles='%s']", 
+									getId(), getName(), getUsername(), getEmail(), getPassword(), isEnabled(), getRoles());
 	}
 }

@@ -8,6 +8,10 @@ import javax.persistence.Id;
 
 @Entity
 public class Role {
+	
+	public final static String ROLE_USER = "USER";
+	public final static String ROLE_MANAGER = "MANAGER";
+	public final static String ROLE_ADMIN = "ADMIN";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,4 +62,5 @@ public class Role {
 	public String toString() {
 		return String.format("Role[id=%d, name='%s', description='%s']", getId(), getName(), getDescription());
 	}
+
 }
