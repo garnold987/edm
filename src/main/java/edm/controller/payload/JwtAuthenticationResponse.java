@@ -1,12 +1,16 @@
 package edm.controller.payload;
 
+import edm.model.user.User;
+
 public class JwtAuthenticationResponse {
 
 	private String accessToken;
     private String tokenType = "Bearer";
+    private User loggedInUser;
 
-    public JwtAuthenticationResponse(String accessToken) {
+    public JwtAuthenticationResponse(String accessToken, User loggedInUser) {
         this.accessToken = accessToken;
+        this.loggedInUser = loggedInUser;
     }
 
     public String getAccessToken() {
@@ -24,4 +28,12 @@ public class JwtAuthenticationResponse {
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
     }
+
+	public User getLoggedInUser() {
+		return loggedInUser;
+	}
+
+	public void setLoggedInUser(User loggedInUser) {
+		this.loggedInUser = loggedInUser;
+	}
 }
