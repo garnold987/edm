@@ -2,9 +2,12 @@ package edm.model.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,9 +16,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "user")
@@ -28,25 +33,32 @@ public class User {
 	@Column(name = "username", unique = true)
 	private String username;
 	
+	@JsonAlias("realname")
+	@Column(name = "name")
+	private String name;
+	
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@Column(name = "password")
 	private String password;
 	
+	@Column(name = "email")
+	private String email;
+	
 	private boolean enabled;
 	
-	@ManyToMany
-	@JoinTable(
-			name = "users_roles",
-			joinColumns = @JoinColumn(
-					name = "user_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(
-					name = "role_id", referencedColumnName = "id"))
-	@Fetch(FetchMode.JOIN)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+	@JoinTable(name = "users_roles", joinColumns = {
+		@JoinColumn(name = "user_id") }, inverseJoinColumns = {
+		@JoinColumn(name = "role_id") })
 	private Collection<Role> roles = new ArrayList<Role>();
 	
 	protected User() { }
 	
-	public User(String username, String password, boolean enabled) {
+	public User(String name, String username, String email, String password, boolean enabled) {
+		
+		setName(name);
 		setUsername(username);
+		setEmail(email);
 		setPassword(password);
 		setEnabled(enabled);
 	}
@@ -75,10 +87,6 @@ public class User {
 		this.password = new BCryptPasswordEncoder().encode(password);
 	}
 
-	public boolean validatePassword(String password) {
-		return new BCryptPasswordEncoder().matches(password, this.password);
-	}
-	
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -91,7 +99,7 @@ public class User {
 		return roles;
 	}
 
-	public void setRoles(Collection<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 	
@@ -99,9 +107,25 @@ public class User {
 		getRoles().add(role);
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
-		return String.format("User[id=%d, username='%s', password='%s', enabled=%s, roles='%s']", 
-									getId(), getUsername(), getPassword(), isEnabled(), getRoles());
+		return String.format("User[id=%d, name='%s', username='%s', email='%s', password='%s', enabled=%s, roles='%s']", 
+									getId(), getName(), getUsername(), getEmail(), getPassword(), isEnabled(), getRoles());
 	}
 }
